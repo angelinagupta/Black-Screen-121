@@ -1,32 +1,15 @@
-import cv2
-import time
-import numpy as np
-
-#to save the output in a file output.avi
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-output_file = cv2.VideoWriter('output.avi', fourcc, 20.0, (640,480))
-
-#start the webcam 
-cap = cv2.VideoCapture(0)
-
-#allowing the webcam to start by making the code sleep for two seconds
-time.sleep(2)
-bg = 0
-
-#capturing background for 60 frames
-for i in range(60):
-    ret, bg = cap.read()
-
-#flipping the background
-bg = np.flip(bg, axis = 1)
-
-#read the captured frame until the camera is on
-while(cap.isOpened()):
-    ret, frame = cap.read() 
-    if not ret:
-        break
+import cv2  
+import numpy as np  
+  
+video = cv2.VideoCapture(0) 
+image = cv2.imread("me.jpeg") 
+  
+while True: 
+  
+    ret, frame = video.read() 
+    print(frame)
     frame = cv2.resize(frame, (640, 480)) 
-    image = cv2.resize(image, (640, 480)) 
+    #image = cv2.resize(image, (640, 480)) 
   
   
     u_black = np.array([104, 153, 70]) 
@@ -38,9 +21,11 @@ while(cap.isOpened()):
     f = frame - res 
     f = np.where(f == 0, image, f) 
   
-    cv2.imshow("Magic", f) 
-    #cv2.imshow("mask", f) 
-
-cap.release()
-#out.release()
-cv2.destroyAllWindows()
+    cv2.imshow("video", frame) 
+    cv2.imshow("mask", f) 
+  
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break 
+  
+video.release() 
+cv2.destroyAllWindows() 
